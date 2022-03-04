@@ -4,7 +4,10 @@ import Form from "./Form";
 
 function App() {
   const [initialPlayers, setInitialPlayers] = useState("");
-  const handleAddUsers = (users: string) => setInitialPlayers(users);
+  const handleAddUsers = (users: string) => {
+    console.log("handleAddUsers was called");
+    setInitialPlayers(users);
+  };
   return (
     <div className="App">
       <header className="App-header">
