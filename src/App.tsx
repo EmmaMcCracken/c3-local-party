@@ -4,8 +4,11 @@ import Form from "./Form";
 
 function App() {
   const [initialPlayers, setInitialPlayers] = useState("");
-  const handleAddUsers = (users: string) => {
-    console.log("handleAddUsers was called");
+  const handleAddUsers = (
+    e: React.FormEvent<HTMLFormElement>,
+    users: string
+  ) => {
+    e.preventDefault();
     setInitialPlayers(users);
   };
   return (
@@ -14,7 +17,9 @@ function App() {
         <h1>C3 Local Party</h1>
       </header>
       <div>
-        <Form handleOnSubmit={(input) => handleAddUsers(input)} />
+        {!initialPlayers && (
+          <Form handleOnSubmit={(e, input) => handleAddUsers(e, input)} />
+        )}
       </div>
       {`The initial players are ${initialPlayers}`}
     </div>
