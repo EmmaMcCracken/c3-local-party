@@ -3,35 +3,52 @@
 // To start the game, in the console enter:
 // const game = new Game(['Emma','Jenna','Raj'])
 // game.play()
+
+import React from "react";
+
+interface GameProps {
+  initialPlayers: string[];
+  timesTables: number[];
+  timeAllowed: number;
+  maxNum: number;
+}
+
 // game.play(8) (for example if Emma was asked for a multiple of 8)
-class Game {
-  constructor(
-    players,
+export class Game extends React.Component {
+  constructor({
+    initialPlayers,
     timesTables = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     timeAllowed = 10,
-    maxNum = 1000
-  ) {
-    [this.next, this.deletePlayer] = generateCycler(
-      players.map((player) => {
-        return {
-          name: player,
-          lives: 2,
-        };
-      })
-    );
-    this.currentPlayer = this.next();
-    this.gameOver = false;
-    this.timesTables = timesTables;
-    this.timeAllowed = timeAllowed;
-    this.numberOfPlays = 0;
-    this.timesTable =
-      timesTables[Math.floor(Math.random() * this.timesTables.length)];
-    this.memory = [];
-    this.maxNum = maxNum;
+    maxNum = 1000,
+  }: GameProps) {
+    super({ initialPlayers, timesTables, timeAllowed, maxNum });
+    this.state = {
+      gameOver: false,
+      next: generateCycler(
+        initialPlayers.map((player) => {
+          return {
+            name: player,
+            lives: 2,
+          };
+        })
+      )[0],
+      deletePlayer: generateCycler(
+        initialPlayers.map((player) => {
+          return {
+            name: player,
+            lives: 2,
+          };
+        })
+      )[1],
+      numberOfPlays: 0,
+      timesTable: timesTables[Math.floor(Math.random() * timesTables.length)],
+      memory: [],
+      currentPlayer: {},
+    };
   }
 
-  play(num) {
-    if (this.gameOver) {
+  play(num: number) {
+    if (this.state.gameOver) {
       return `${this.currentPlayer.name} has won!`;
     }
     if (this.numberOfPlays === 0) {
@@ -100,8 +117,8 @@ function generateCycler(players) {
   function deletePlayer() {
     players = players.filter((e) => e !== element);
     ix = (ix - 1) % players.length;
-    const gameOver = players.length === 1;
-    return gameOver;
+    const isGameOver = players.length === 1;
+    return isGameOver;
   }
   return [next, deletePlayer];
 }
