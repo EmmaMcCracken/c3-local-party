@@ -13,8 +13,18 @@ interface GameProps {
   maxNum: number;
 }
 
+interface StateProps {
+  gameOver: boolean;
+  next: () => void;
+  deletePlayer: () => boolean;
+  numberOfPlays: number;
+  timesTable: number;
+  memory: number[];
+  currentPlayer: any;
+}
+
 // game.play(8) (for example if Emma was asked for a multiple of 8)
-export class Game extends React.Component {
+export class Game extends React.Component<GameProps, StateProps> {
   constructor({
     initialPlayers,
     timesTables = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -49,7 +59,7 @@ export class Game extends React.Component {
 
   play(num: number) {
     if (this.state.gameOver) {
-      return `${this.currentPlayer.name} has won!`;
+      return `${this.state.currentPlayer.name} has won!`;
     }
     if (this.numberOfPlays === 0) {
       this.startTime = new Date();
